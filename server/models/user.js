@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('./db');
+const sequelize = require('../db');
 
 const User = sequelize.define('User', {
   id: {
@@ -28,6 +28,14 @@ const User = sequelize.define('User', {
     type: DataTypes.DATE,
     defaultValue: null,
   },
+  status: {
+    type: DataTypes.ENUM('active', 'blocked'),
+    defaultValue: 'active',
+  },
 });
+
+(async () => {
+  await User.sync({ alter: false });
+})();
 
 module.exports = User;
