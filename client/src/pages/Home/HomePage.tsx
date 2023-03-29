@@ -1,12 +1,20 @@
 import { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { Header } from '../../components/Header';
 import { Table } from '../../components/Table';
 import { Toolbar } from '../../components/Toolbar';
+import { useUserContext } from '../../context/UserContext';
 import { IUser } from '../../interfaces/user';
 import { getUsers } from '../../mocks/getUsers';
-import { users } from '../../mocks/users';
 
 export const HomePage = () => {
+  const user = useUserContext();
+  const isLoggedIn = user?.id;
+
+  if (!isLoggedIn) {
+    return <Navigate to="login" replace />;
+  }
+
   const [users, setUsers] = useState<IUser[]>([]);
 
   useEffect(() => {

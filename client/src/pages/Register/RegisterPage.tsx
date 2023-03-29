@@ -1,11 +1,24 @@
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useUserUpdateContext } from '../../context/UserContext';
 import { RegisterData } from './types';
 
 export const RegisterPage = () => {
   const { register, handleSubmit } = useForm<RegisterData>();
+  const setUser = useUserUpdateContext();
+  const navigate = useNavigate();
+
   const onsubmit = (data: RegisterData) => {
     console.log(data);
+    setUser({
+      ...data,
+      id: '1',
+      loginTime: new Date().toISOString(),
+      registrationTime: new Date().toISOString(),
+      status: 'active',
+    });
+
+    navigate('/');
   };
 
   return (
