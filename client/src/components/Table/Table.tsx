@@ -60,7 +60,7 @@ export const Table = ({ users }: TableProps) => {
                 {user.email}
               </td>
               <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {user.registrationTime}
+                {user.registerTime}
               </td>
               <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 {user.loginTime}
