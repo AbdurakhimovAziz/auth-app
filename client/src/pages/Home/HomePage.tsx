@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { getAllUsers } from '../../api/uesrs';
 import { Header } from '../../components/Header';
 import { Table } from '../../components/Table';
 import { Toolbar } from '../../components/Toolbar';
 import { useUserContext } from '../../context/UserContext';
 import { IUser } from '../../interfaces/user';
-import { getUsers } from '../../mocks/getUsers';
+import { getToken } from '../../utils/token';
 
 export const HomePage = () => {
-  const user = useUserContext();
-  const isLoggedIn = user?.id;
+  const isLoggedIn = getToken();
 
   if (!isLoggedIn) {
     return <Navigate to="login" replace />;
@@ -18,9 +18,7 @@ export const HomePage = () => {
   const [users, setUsers] = useState<IUser[]>([]);
 
   useEffect(() => {
-    getUsers().then((users) => {
-      setUsers(users);
-    });
+    getAllUsers().then((users) => setUsers(users));
   }, []);
 
   return (

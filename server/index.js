@@ -1,17 +1,23 @@
 const express = require('express');
 const cors = require('cors');
-const users = require('./routes/users');
-const auth = require('./routes/auth');
-const db = require('./db');
+const passport = require('passport');
 require('dotenv').config();
+
+const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
+const db = require('./db');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/users', users);
-app.use('/auth', auth);
+
+require('./config/passport')(passport);
+const auth = passport.authenticate('jwt', { session: false });
+
+app.use('/users', auth, usersRouter);
+app.use('/auth', authRouter);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Hello world!' });

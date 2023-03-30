@@ -1,9 +1,9 @@
 export interface IUser {
-  id: string;
+  id: number;
   name: string;
   email: string;
   registerTime: string;
-  loginTime: string;
+  loginTime?: string;
   status: 'active' | 'blocked';
 }
 

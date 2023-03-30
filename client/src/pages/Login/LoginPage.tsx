@@ -1,11 +1,24 @@
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { login } from '../../api/auth';
+import { useUserUpdateContext } from '../../context/UserContext';
+import { saveToken } from '../../utils/token';
 import { LoginData } from './types';
 
 export const LoginPage = () => {
   const { register, handleSubmit } = useForm<LoginData>();
-  const onsubmit = (data: LoginData) => {
-    console.log(data);
+  const setUser = useUserUpdateContext();
+  const navigate = useNavigate();
+
+  const onsubmit = async (data: LoginData) => {
+    try {
+      const { user, token } = await login(data.email, data.password);
+      setUser(user);
+      saveToken(token);
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
