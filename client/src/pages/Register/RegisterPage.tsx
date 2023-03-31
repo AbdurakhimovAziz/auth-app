@@ -2,8 +2,11 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { signup } from '../../api/auth';
 import { RegisterData } from './types';
+import { useState } from 'react';
+import { AxiosError } from 'axios';
 
 export const RegisterPage = () => {
+  const [error, setError] = useState<string | null>(null);
   const { register, handleSubmit } = useForm<RegisterData>();
   const navigate = useNavigate();
 
@@ -12,7 +15,9 @@ export const RegisterPage = () => {
       await signup(data);
       navigate('/login');
     } catch (error) {
-      console.log(error);
+      if (error instanceof AxiosError) {
+        setError(error.response?.data.message);
+      }
     }
   };
 
@@ -27,7 +32,6 @@ export const RegisterPage = () => {
           <h2 className="text-center font-semibold text-3xl lg:text-4xl text-gray-800">
             Register
           </h2>
-
           <form className="mt-10 space-y-4" onSubmit={handleSubmit(onsubmit)}>
             <div>
               <label
@@ -47,7 +51,6 @@ export const RegisterPage = () => {
                 {...register('name', { required: true })}
               />
             </div>
-
             <div>
               <label
                 htmlFor="email"
@@ -66,7 +69,6 @@ export const RegisterPage = () => {
                 {...register('email', { required: true })}
               />
             </div>
-
             <div>
               <label
                 htmlFor="password"
@@ -85,7 +87,7 @@ export const RegisterPage = () => {
                 {...register('password', { required: true })}
               />
             </div>
-
+            {error && <div className="text-red-500 text-center">{error}</div>}
             <button
               type="submit"
               className="w-full py-3 mt-10 bg-gray-800 rounded-sm
@@ -94,7 +96,6 @@ export const RegisterPage = () => {
             >
               Register
             </button>
-
             <div className="flex flex-wrap justify-end mt-8 mb-4 text-sm text-center">
               <Link to="../login" className="flex-2 underline">
                 Already have an account?

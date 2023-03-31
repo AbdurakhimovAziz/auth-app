@@ -6,6 +6,7 @@ require('dotenv').config();
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const db = require('./db');
+const { handleError } = require('./utils');
 
 const app = express();
 
@@ -18,10 +19,7 @@ const auth = passport.authenticate('jwt', { session: false });
 
 app.use('/users', auth, usersRouter);
 app.use('/auth', authRouter);
-
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello world!' });
-});
+app.use(handleError);
 
 db.authenticate()
   .then(() => {

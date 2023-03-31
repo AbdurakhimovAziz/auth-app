@@ -10,10 +10,19 @@ const options = {
 
 module.exports = (passport) => {
   passport.use(
-    new JwtStrategy(options, async function (jwt_payload, done) {
+    new JwtStrategy(options, async (jwt_payload, done) => {
       const user = await usersService.getById(jwt_payload.sub);
-      if (user.status === 'blocked')
-        return done(null, false, { message: 'User is blocked' });
+      if (!user) {
+        const error = new Error('User not found');
+        error.status = 404;
+        return done(error, false);
+      }
+
+      if (user.status === 'blocked') {
+        const error = new Error('User is blocked');
+        error.status = 403;
+        return done(error, false);
+      }
       return done(null, user || false);
     })
   );

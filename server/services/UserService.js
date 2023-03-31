@@ -41,7 +41,12 @@ class UserService {
 
   async login(email, password) {
     const user = await this.getByEmail(email);
-    return user && bcrypt.compareSync(password, user.password) ? user : null;
+    if (!user) {
+      const error = new Error('User not found');
+      error.status = 404;
+      throw error;
+    }
+    return bcrypt.compareSync(password, user.password) ? user : null;
   }
 }
 

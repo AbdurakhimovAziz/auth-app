@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import {
   blockUsersByIds,
   deleteUsersByIds,
@@ -13,11 +13,13 @@ import { useUserUpdateContext } from '../../context/UserContext';
 import { IUser } from '../../interfaces/user';
 import { getTokenFromStorage } from '../../utils/token';
 import { getUserFromStorage } from '../../utils/user';
+import { clearLocalStorage } from '../../utils/utils';
 
 export const HomePage = () => {
   const isLoggedIn = getTokenFromStorage();
   const user = getUserFromStorage();
   const saveUser = useUserUpdateContext();
+  const navigate = useNavigate();
 
   if (!isLoggedIn || !user) {
     return <Navigate to="login" replace />;
@@ -31,7 +33,12 @@ export const HomePage = () => {
   };
 
   const refreshUsers = () => {
-    getAllUsers().then((users) => setUsers(users));
+    getAllUsers()
+      .then((users) => setUsers(users))
+      .catch((error) => {
+        clearLocalStorage();
+        navigate('/login');
+      });
   };
 
   const blockUsers = async () => {

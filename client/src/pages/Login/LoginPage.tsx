@@ -4,8 +4,11 @@ import { login } from '../../api/auth';
 import { saveTokenToStorage } from '../../utils/token';
 import { saveUserToStorage } from '../../utils/user';
 import { LoginData } from './types';
+import { useState } from 'react';
+import { AxiosError } from 'axios';
 
 export const LoginPage = () => {
+  const [error, setError] = useState<string | null>(null);
   const { register, handleSubmit } = useForm<LoginData>();
   const navigate = useNavigate();
 
@@ -16,7 +19,9 @@ export const LoginPage = () => {
       saveUserToStorage(user);
       navigate('/');
     } catch (error) {
-      console.log(error);
+      if (error instanceof AxiosError) {
+        setError(error.response?.data.message);
+      }
     }
   };
 
@@ -31,7 +36,6 @@ export const LoginPage = () => {
           <h2 className="text-center font-semibold text-3xl lg:text-4xl text-gray-800">
             Login
           </h2>
-
           <form className="mt-10 space-y-4" onSubmit={handleSubmit(onsubmit)}>
             <div>
               <label
@@ -51,7 +55,6 @@ export const LoginPage = () => {
                 {...register('email', { required: true })}
               />
             </div>
-
             <div>
               <label
                 htmlFor="password"
@@ -70,7 +73,7 @@ export const LoginPage = () => {
                 {...register('password', { required: true })}
               />
             </div>
-
+            {error && <div className="text-red-500 text-center">{error}</div>}
             <button
               type="submit"
               className="w-full py-3 mt-10 bg-gray-800 rounded-sm
@@ -79,7 +82,6 @@ export const LoginPage = () => {
             >
               Login
             </button>
-
             <div className="flex flex-wrap justify-end mt-8 mb-4 text-sm text-center">
               <Link to="../register" className="flex-2 underline">
                 Create account

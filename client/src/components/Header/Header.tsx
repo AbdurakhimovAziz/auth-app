@@ -3,8 +3,7 @@ import {
   useUserContext,
   useUserUpdateContext,
 } from '../../context/UserContext';
-import { removeTokenFromStorage } from '../../utils/token';
-import { removeUserFromStorage } from '../../utils/user';
+import { clearLocalStorage } from '../../utils/utils';
 
 export const Header = () => {
   const user = useUserContext();
@@ -13,8 +12,7 @@ export const Header = () => {
 
   const logout = () => {
     setUser(null);
-    removeTokenFromStorage();
-    removeUserFromStorage();
+    clearLocalStorage();
     navigate('/login');
   };
 
