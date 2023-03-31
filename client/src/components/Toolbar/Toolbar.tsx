@@ -8,7 +8,7 @@ export const Toolbar = ({
 }: ToolbarProps) => {
   const btnClasses = 'px-4 py-2 rounded-md';
   return (
-    <div className="flex space-x-5 text-white">
+    <div className="flex space-x-5 justify-center text-white">
       <button className={cx(btnClasses, 'bg-amber-300 ')} onClick={blockUsers}>
         Block
       </button>
