@@ -1,11 +1,11 @@
-export const saveToken = (token: string) => {
+export const saveTokenToStorage = (token: string) => {
   localStorage.setItem('token', token);
 };
 
-export const getToken = () => {
+export const getTokenFromStorage = () => {
   return localStorage.getItem('token');
 };
 
-export const removeToken = () => {
+export const removeTokenFromStorage = () => {
   localStorage.removeItem('token');
 };

@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
 class UserService {
-  create(user) {
+  async create(user) {
     return User.create({
       name: user.name,
       email: user.email,
@@ -11,20 +11,32 @@ class UserService {
     });
   }
 
-  getAll() {
+  async getAll() {
     return User.findAll();
   }
 
-  getById(id) {
+  async getById(id) {
     return User.findOne({ where: { id: id } });
   }
 
-  getByEmail(email) {
+  async getByEmail(email) {
     return User.findOne({ where: { email: email } });
   }
 
-  update(id, user) {
+  async update(id, user) {
     return User.update(user, { where: { id: id } });
+  }
+
+  async blockUsers(ids) {
+    return User.update({ status: 'blocked' }, { where: { id: ids } });
+  }
+
+  async unblockUsers(ids) {
+    return User.update({ status: 'active' }, { where: { id: ids } });
+  }
+
+  async deleteUsers(ids) {
+    return User.destroy({ where: { id: ids } });
   }
 
   async login(email, password) {
