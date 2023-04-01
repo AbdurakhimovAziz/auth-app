@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getTokenFromStorage } from '../utils/token';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: 'https://auth-express-server.onrender.com',
 });
 
 axiosInstance.interceptors.request.use(
